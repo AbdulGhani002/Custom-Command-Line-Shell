@@ -5,11 +5,16 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-void cd(char* prompt) {
-    if (prompt == NULL || strcmp(prompt, "") == 0) {
+void cd(char *prompt)
+{
+    if (prompt == NULL || strcmp(prompt, "") == 0)
+    {
         fprintf(stderr, "cd: expected argument\n");
-    } else {
-        if (chdir(prompt) != 0) {
+    }
+    else
+    {
+        if (chdir(prompt) != 0)
+        {
             perror("cd");
             return;
         }
@@ -17,19 +22,24 @@ void cd(char* prompt) {
         DIR *d;
         struct dirent *dir;
         d = opendir(".");
-        if (d) {
+        if (d)
+        {
             printf("Contents of the directory:\n");
-            while ((dir = readdir(d)) != NULL) {
+            while ((dir = readdir(d)) != NULL)
+            {
                 printf("%s\n", dir->d_name);
             }
             closedir(d);
-        } else {
+        }
+        else
+        {
             perror("opendir");
         }
     }
 }
 
-void help(char* prompt) {
+void help(char *prompt)
+{
     printf("Shell Help - List of Available Commands:\n\n");
     printf("cd <directory>  - Changes the current directory to the specified directory.\n");
     printf("help            - Displays this help information.\n");
@@ -43,74 +53,121 @@ void help(char* prompt) {
     printf("touch <file>    - Creates an empty file or updates the timestamp of the specified file.\n\n");
     printf("Type the command name followed by its arguments, if any, to use the command.\n");
 }
-void exit_shell(char* prompt){
+void exit_shell(char *prompt)
+{
     printf("Exiting shell...\n");
+    reset_color();
     exit(0);
 };
-void pwd(char* prompt){
+void pwd(char *prompt)
+{
     char cwd[10000];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {
         printf("Current working directory: %s\n", cwd);
-    } else {
+    }
+    else
+    {
         perror("pwd");
     }
 };
-void echo(char* prompt){
-    printf("%s\n",prompt);
+void echo(char *prompt)
+{
+    printf("%s\n", prompt);
 };
-void clear_screen(char* prompt){
+void clear_screen(char *prompt)
+{
     printf("\033[H\033[J");
 };
-void ls(char* prompt){
+void ls(char *prompt)
+{
     DIR *d;
-        struct dirent *dir;
-        d = opendir(".");
-        if (d) {
-            printf("Contents of the directory:\n");
-            while ((dir = readdir(d)) != NULL) {
-                printf("%s\n", dir->d_name);
-            }
-            closedir(d);
-        } else {
-            perror("opendir");
+    struct dirent *dir;
+    d = opendir(".");
+    if (d)
+    {
+        printf("Contents of the directory:\n");
+        while ((dir = readdir(d)) != NULL)
+        {
+            printf("%s\n", dir->d_name);
         }
+        closedir(d);
+    }
+    else
+    {
+        perror("opendir");
+    }
 };
-void mkdir_command(char* prompt){
-    if (prompt == NULL || *prompt == '\0') {
+void mkdir_command(char *prompt)
+{
+    if (prompt == NULL || *prompt == '\0')
+    {
         fprintf(stderr, "mkdir: missing operand\n");
-    } else {
-        
-        if (mkdir(prompt) == -1) {
-            perror("mkdir"); 
-        } else {
+    }
+    else
+    {
+
+        if (mkdir(prompt) == -1)
+        {
+            perror("mkdir");
+        }
+        else
+        {
             printf("Directory '%s' created successfully.\n", prompt);
         }
     }
 };
-void rmdir_command(char* prompt){
-    if (prompt == NULL || *prompt == '\0') {
+void rmdir_command(char *prompt)
+{
+    if (prompt == NULL || *prompt == '\0')
+    {
         fprintf(stderr, "rmdir: missing operand\n");
-    } else {
-        
-        if (rmdir(prompt) == -1) {
-            perror("rmdir"); 
-        } else {
+    }
+    else
+    {
+
+        if (rmdir(prompt) == -1)
+        {
+            perror("rmdir");
+        }
+        else
+        {
             printf("Directory '%s' removed successfully.\n", prompt);
         }
     }
 };
-void touch(char* prompt){
-    if (prompt == NULL || *prompt == '\0') {
+void touch(char *prompt)
+{
+    if (prompt == NULL || *prompt == '\0')
+    {
         fprintf(stderr, "touch: missing file operand\n");
         return;
     }
 
-    int fd = open(prompt, O_WRONLY | O_CREAT , 0644);
-    
-    if (fd == -1) {
+    int fd = open(prompt, O_WRONLY | O_CREAT, 0644);
+
+    if (fd == -1)
+    {
         perror("touch");
-    } else {
+    }
+    else
+    {
         close(fd);
         printf("File '%s' touched/created successfully.\n", prompt);
     }
 };
+void set_color(const char *color_code)
+{
+    printf("%s", color_code);
+}
+
+void reset_color()
+{
+    printf("\033[0m");
+}
+
+void custom_prompt()
+{
+    set_color("\033[1;34m");
+    printf("MyShell> ");
+}

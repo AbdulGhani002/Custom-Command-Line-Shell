@@ -2,16 +2,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-void cd(char* prompt);
-void help(char* prompt);
-void exit_shell(char* prompt);
-void pwd(char* prompt);
-void echo(char* prompt);
-void clear_screen(char* prompt);
-void ls(char* prompt);
-void mkdir_command(char* prompt);
-void rmdir_command(char* prompt);
-void touch(char* prompt);
+void cd(char *prompt);
+void help(char *prompt);
+void exit_shell(char *prompt);
+void pwd(char *prompt);
+void echo(char *prompt);
+void clear_screen(char *prompt);
+void ls(char *prompt);
+void mkdir_command(char *prompt);
+void rmdir_command(char *prompt);
+void touch(char *prompt);
+void custom_prompt();
+void reset_color();
 const char *in_built_commands[10] = {
     "cd",    // Change directory
     "help",  // Show help information
@@ -24,7 +26,7 @@ const char *in_built_commands[10] = {
     "rmdir", // Remove directory
     "touch"  // Create an empty file or update file timestamp
 };
-void (*command_functions[10])(char* prompt) = {
+void (*command_functions[10])(char *prompt) = {
     cd,
     help,
     exit_shell,
@@ -34,6 +36,5 @@ void (*command_functions[10])(char* prompt) = {
     ls,
     mkdir_command,
     rmdir_command,
-    touch
-};
+    touch};
 #include "functions.c"
